@@ -1,0 +1,11 @@
+server:
+  port: 9996
+  servlet:
+    context-path: /mychat
+#logging:
+  #level:
+    #com.renshuo.cloud.user.dao: debug
+wechat:
+  appid: wx6984d5b40d846fcc
+  secret: 8b911a577273b10ff01e13e9443fc4b9
+  grant_type: client_credential

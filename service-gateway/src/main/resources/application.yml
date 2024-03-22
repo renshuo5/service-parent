@@ -1,0 +1,36 @@
+server:
+  port: 8889
+spring:
+  application:
+    name: service-gateway
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: service-base
+          uri: lb://service-base
+          predicates:
+          - Path= /api/**
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+          - Path= /user/**
+        - id: service-data
+          uri: lb://service-data
+          predicates:
+          - Path= /data/**
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        tags: version=1.0,desc=网关服务
+        health-check-path: /actuator/health
+management:
+  endpoint:
+    health:
+      show-details: always

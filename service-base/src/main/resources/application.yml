@@ -1,0 +1,35 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: service-base
+  datasource:
+    username: root
+    password: ev@z9w5
+    url: jdbc:mysql://10.11.1.108:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 10.11.1.109
+    port: 6379
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        tags: version=1.0,desc=基础服务
+        health-check-path: ${server.servlet.context-path}/actuator/health
+        service-name: service-base
+mybatis:
+  mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
+  type-aliases-package: com.bitnei.cloud.*.domain
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+  mapperRefresher: #是否热部署
+    enabled: true
+    initialDelay: 30
+ribbon:
+  ConnectTimeout: 6000 #请求连接的超时时间，默认时间为1秒
+  ReadTimeout: 6000 #请求处理的超时时间

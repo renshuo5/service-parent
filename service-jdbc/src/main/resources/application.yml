@@ -1,0 +1,41 @@
+server:
+  port: 9986
+  servlet:
+    context-path: /api
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: service-user
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 10000
+    timeBetweenEvictionRunsMillis: 28000
+    minEvictableIdleTimeMillis: 28000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    filters: stat,wall,log4j
+    logSlowSql: true
+  redis:
+    host: 10.11.1.21
+    port: 6381
+mybatis:
+  mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
+  type-aliases-package: com.bitnei.cloud.*.domain
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+  mapperRefresher: #是否热部署
+    enabled: true
+    initialDelay: 30
+logging:
+  level:
+    com.renshuo.cloud.user.dao: debug

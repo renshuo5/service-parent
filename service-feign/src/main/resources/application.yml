@@ -1,0 +1,28 @@
+server:
+  port: 8899
+  servlet:
+    context-path: /feign
+feign:
+  compression:
+    request:
+      enabled: true
+      mime-types: text/xml,application/xml,application/json
+      min-request-size: 2048
+  hystrix:
+    enabled: true
+logging:
+  level:
+    com.renshuo.cloud.feign.HelloFeignClient: debug
+hystrix.:
+  command:
+    fallbackcmd:  #default全局有效
+      execution:
+        timeout:
+          #是否开启超时熔断
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000 #断路器超时时间，默认1000ms
+ribbon:
+  readtimeout: 6000
+  connecttimeout: 6000

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//org//DTD Mapper 3.0//EN" "http://org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renshuo.cloud.device.dao.RepairMapper">
+    <resultMap id="repairResults" type="com.renshuo.cloud.device.domain.Repair"
+               autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        id,office_id,device_id,device_fault_id,repair_person,repair_person_no,repair_phone,repair_type,repair_price,repair_parts,repair_parts_price,repair_company,repair_result,repair_expiration,repair_hospital_note,repair_time,repair_cost,repair_plan,repair_course,repair_result_text,del_flag,create_by,create_time,update_by,update_time,remarks,reserve_int,reserve_varchar
+    </sql>
+    <sql id="moreColumns">
+        id,office_id,device_id,device_fault_id,repair_person,repair_person_no,repair_phone,repair_type,repair_price,repair_parts,repair_parts_price,repair_company,repair_result,repair_expiration,repair_hospital_note,repair_time,repair_cost,repair_plan,repair_course,repair_result_text,del_flag,create_by,create_time,update_by,update_time,remarks,reserve_int,reserve_varchar
+    </sql>
+
+    <sql id="pagerModelWhereSqlId">
+        <where>
+
+        </where>
+    </sql>
+
+
+    <!-- 分页查询 -->
+    <select id="pagerModel" resultMap="repairResults" parameterType="java.util.HashMap" resultOrdered="true">
+        select
+            <include refid="moreColumns"/>
+        from
+        device_repair
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="pagerModel_COUNT" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select
+            count(1)
+        from
+        device_repair
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- excel分页查询 -->
+    <select id="pagerExcelModelCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select
+            count(1)
+        from
+        device_repair
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- 根据id查询 -->
+    <select id="findById" resultType="com.renshuo.cloud.device.domain.Repair"
+            parameterType="java.util.HashMap">
+        select
+        <include refid="moreColumns"/>
+        from
+        device_repair
+        <where>
+            id=#{id}
+        </where>
+    </select>
+
+    <!-- 增加 -->
+    <insert id="insert" parameterType="java.util.HashMap">
+        insert into
+        device_repair
+        (id
+        ,office_id
+        ,device_id
+        ,device_fault_id
+        ,repair_person
+        ,repair_person_no
+        ,repair_phone
+        ,repair_type
+        ,repair_price
+        ,repair_parts
+        ,repair_parts_price
+        ,repair_company
+        ,repair_result
+        ,repair_expiration
+        ,repair_hospital_note
+        ,repair_time
+        ,repair_cost
+        ,repair_plan
+        ,repair_course
+        ,repair_result_text
+        ,del_flag
+        ,create_by
+        ,create_time
+        ,remarks
+        ,reserve_int
+        ,reserve_varchar)
+        values
+        (#{id}
+        ,#{officeId}
+        ,#{deviceId}
+        ,#{deviceFaultId}
+        ,#{repairPerson}
+        ,#{repairPersonNo}
+        ,#{repairPhone}
+        ,#{repairType}
+        ,#{repairPrice}
+        ,#{repairParts}
+        ,#{repairPartsPrice}
+        ,#{repairCompany}
+        ,#{repairResult}
+        ,#{repairExpiration}
+        ,#{repairHospitalNote}
+        ,#{repairTime}
+        ,#{repairCost}
+        ,#{repairPlan}
+        ,#{repairCourse}
+        ,#{repairResultText}
+        ,#{delFlag}
+        ,#{createBy}
+        ,#{createTime}
+        ,#{remarks}
+        ,#{reserveInt}
+        ,#{reserveVarchar})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="java.util.HashMap">
+        update device_repair set
+        id=id
+        ,office_id=#{officeId}
+        ,device_id=#{deviceId}
+        ,device_fault_id=#{deviceFaultId}
+        ,repair_person=#{repairPerson}
+        ,repair_person_no=#{repairPersonNo}
+        ,repair_phone=#{repairPhone}
+        ,repair_type=#{repairType}
+        ,repair_price=#{repairPrice}
+        ,repair_parts=#{repairParts}
+        ,repair_parts_price=#{repairPartsPrice}
+        ,repair_company=#{repairCompany}
+        ,repair_result=#{repairResult}
+        ,repair_expiration=#{repairExpiration}
+        ,repair_hospital_note=#{repairHospitalNote}
+        ,repair_time=#{repairTime}
+        ,repair_cost=#{repairCost}
+        ,repair_plan=#{repairPlan}
+        ,repair_course=#{repairCourse}
+        ,repair_result_text=#{repairResultText}
+        ,del_flag=#{delFlag}
+        ,update_by=#{updateBy}
+        ,update_time=#{updateTime}
+        ,remarks=#{remarks}
+        ,reserve_int=#{reserveInt}
+        ,reserve_varchar=#{reserveVarchar}
+        <where>
+            id = #{id}
+        </where>
+
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from
+        device_repair
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+</mapper>

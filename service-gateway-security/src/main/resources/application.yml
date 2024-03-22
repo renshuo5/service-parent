@@ -1,0 +1,55 @@
+server:
+  port: 8889
+spring:
+  application:
+    name: service-gateway
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 10.11.1.22
+    port: 6380
+    password: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: a9c1bf3c-60ce-4551-9bbe-fae080317dbc
+        group: DEFAULT_GROUP
+    gateway:
+      routes:
+        - id: service-base
+          uri: lb://service-base
+          predicates:
+          - Path= /api/**
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+          - Path= /user/**
+#          filters:
+#          - StripPrefix=1
+        - id: service-data
+          uri: lb://service-data
+          predicates:
+          - Path= /data/**
+mybatis:
+  mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
+  type-aliases-package: com.renshuo.cloud.domain
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+  mapperRefresher: #是否热部署
+    enabled: true
+    initialDelay: 30
+management:
+  endpoint:
+    health:
+      show-details: always
+#nacos:
+#  discovery:
+#    server-addr: localhost:8848
+#    namespace: a9c1bf3c-60ce-4551-9bbe-fae080317dbc

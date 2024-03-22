@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标题</title>
+</head>
+<body>
+<p>
+    <img width="100" height="50" src='cid:CSDN1234'/>
+    <img width="100" height="100"src='cid:Alian1223'/>
+    </br>
+    <span></span>
+</p>
+<table>
+    <tr>
+        <td>平台地址：</td>
+        <td><a href="${website}">${website}</a></td>
+    </tr>
+    <tr>
+        <td>登录账号：</td>
+        <td>${userName}</td>
+    </tr>
+    <tr>
+        <td>登录密码：</td>
+        <td>${password}</td>
+    </tr>
+    <tr>
+        <td>真实姓名：</td>
+        <td>${realName}</td>
+    </tr>
+</table>
+<p>
+    温馨提示：密码有效期为90天，密码必须包含大小写字母数字及特殊符号且长度不小于8位，请妥善保管好密码，祝您工作顺利！
+</p>
+</body>
+</html>

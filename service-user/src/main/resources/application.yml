@@ -1,0 +1,56 @@
+server:
+  port: 9996
+  servlet:
+    context-path: /user
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: service-user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: a9c1bf3c-60ce-4551-9bbe-fae080317dbc
+        group: DEFAULT_GROUP
+#  cloud:
+#    consul:
+#      host: 127.0.0.1
+#      port: 8500
+#      discovery:
+#        tags: version=1.0,desc=用户服务
+#        health-check-path: ${server.servlet.context-path}/actuator/health
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&serverTimezone=GMT
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 10.11.1.21
+    port: 6381
+    #电子邮件
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username:  yjfk@bitnei.cn
+    password:  Abc.1234
+    protocol:  smtp
+    sendto:  renshuo@bitnei.cn
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+mybatis:
+  mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
+  type-aliases-package: com.renshuo.cloud.*.domain
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+  mapperRefresher: #是否热部署
+    enabled: true
+    initialDelay: 30
+logging:
+  level:
+    com.renshuo.cloud.user.dao: debug
+    com.renshuo.cloud.device.dao: debug

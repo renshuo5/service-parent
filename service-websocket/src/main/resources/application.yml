@@ -1,0 +1,13 @@
+server:
+  port: 19999
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: service-ws
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: a9c1bf3c-60ce-4551-9bbe-fae080317dbc
+        group: DEFAULT_GROUP

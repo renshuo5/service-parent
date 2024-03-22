@@ -1,0 +1,33 @@
+server:
+  port: 9911
+  servlet:
+    context-path: /security
+spring:
+  application:
+    name: service-shiro
+  main:
+    allow-bean-definition-overriding: true
+  resources:
+    static-locations: classpath:./static
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 10.11.1.22
+    port: 6380
+    password: 123456
+mybatis:
+  mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
+  type-aliases-package: com.renshuo.cloud.domain
+  configuration:
+    map-underscore-to-camel-case: true #驼峰
+  mapperRefresher: #是否热部署
+    enabled: true
+    initialDelay: 30
+management:
+  health:
+    redis:
+      enabled: false

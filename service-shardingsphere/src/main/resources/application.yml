@@ -1,0 +1,46 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  shardingsphere:
+    enabled: true
+    datasource:
+      names: m1,m2
+      m1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/test_rs?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+        username: root
+        password: 123456
+      m2:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/test_rs_slave?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+        username: root
+        password: 123456
+    sharding:
+      tables:
+        course:
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+            props:
+              worker:
+                id: 1
+          actual-data-nodes: m$->{1..2}.course_$->{1..2}
+          database-strategy:
+            #inline不支持策略查询
+            inline:
+              sharding-column: id
+              algorithm-expression: m$->{id%2+1}
+          table-strategy:
+            #inline不支持策略查询
+            inline:
+              sharding-column: id
+              algorithm-expression: course_$->{id%2+1}
+    props:
+      sql:
+        show: true
+
+
+
+
