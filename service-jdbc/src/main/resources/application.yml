@@ -9,8 +9,9 @@ spring:
     name: service-user
   datasource:
     username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true
+    password: Ren5844669!
+#    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true
+    url: jdbc:mysql://rm-2zex89nx9h146iy414o.mysql.rds.aliyuncs.com:3306/zgmrl?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 5
@@ -26,8 +27,9 @@ spring:
     filters: stat,wall,log4j
     logSlowSql: true
   redis:
-    host: 10.11.1.21
-    port: 6381
+    host: 120.53.104.206
+    port: 6379
+    password: renshuo
 mybatis:
   mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
   type-aliases-package: com.bitnei.cloud.*.domain

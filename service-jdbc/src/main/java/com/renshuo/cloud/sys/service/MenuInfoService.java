@@ -11,6 +11,7 @@ import com.renshuo.cloud.service.impl.BaseService;
 import com.renshuo.cloud.sys.domain.MenuInfo;
 import com.renshuo.cloud.sys.excelModel.MenuInfoExcelModel;
 import com.renshuo.cloud.sys.model.MenuInfoModel;
+import com.renshuo.cloud.sys.model.MenuInfoSelectModel;
 import com.renshuo.cloud.util.DateUtil;
 import com.renshuo.cloud.util.MapperUtil;
 import com.renshuo.cloud.util.PagerInfoUtil;
@@ -77,13 +78,28 @@ public class MenuInfoService extends BaseService {
      * 全部的菜单内容不包括按钮
      * @return
      */
-    public List<MenuInfoModel> getMenuAll(){
+    public List<MenuInfoSelectModel> getMenuAll(){
         Map<String, Object> param = new HashMap<>();
         PageInfo pr = new PageInfo();
         // 非分页查询
         List<MenuInfo> list = findBySqlId("findListMenu", param);
-        List<MenuInfoModel> models = models(list);
-        return models;
+
+        List<MenuInfoSelectModel> collect = list.stream().map(menuInfo -> {
+            MenuInfoSelectModel model = MenuInfoSelectModel.fromEntry(menuInfo);
+            return model;
+        }).collect(Collectors.toList());
+
+        List<MenuInfoSelectModel> menuTree  = new ArrayList<>();
+
+        for (MenuInfoSelectModel menu : collect) {
+            if(menu.getIsRoot().intValue() == 1){
+                //说明是root节点 top菜单
+
+                menuTree.add(findSelectChildren(menu, collect));
+            }
+
+        }
+        return menuTree;
     }
 
     public List<MenuInfoModel> getMenuTree(){
@@ -111,7 +127,7 @@ public class MenuInfoService extends BaseService {
      * @param list
      * @return
      */
-    private static MenuInfoModel findChildren(MenuInfoModel parentMenu, List<MenuInfoModel> list) {
+    private MenuInfoModel findChildren(MenuInfoModel parentMenu, List<MenuInfoModel> list) {
         for (MenuInfoModel menu : list) {
             //递归查找叶子节点
             if(parentMenu.getId().equals(menu.getParentId())){
@@ -119,6 +135,24 @@ public class MenuInfoService extends BaseService {
                     parentMenu.setChild(new ArrayList<>());
                 }
                 parentMenu.getChild().add(findChildren(menu,list));
+            }
+        }
+        return parentMenu;
+    }
+    /**
+     * 查找节点下面的节点
+     * @param parentMenu
+     * @param list
+     * @return
+     */
+    private MenuInfoSelectModel findSelectChildren(MenuInfoSelectModel parentMenu, List<MenuInfoSelectModel> list) {
+        for (MenuInfoSelectModel menu : list) {
+            //递归查找叶子节点
+            if(parentMenu.getId().equals(menu.getParentId())){
+                if (parentMenu.getChildren() == null) {
+                    parentMenu.setChildren(new ArrayList<>());
+                }
+                parentMenu.getChildren().add(findSelectChildren(menu,list));
             }
         }
         return parentMenu;

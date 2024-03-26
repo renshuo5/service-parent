@@ -26,6 +26,8 @@
         from
         sys_menu_info
         <include refid="pagerModelWhereSqlId" />
+
+        order by parent_id,order_num
     </select>
 
     <!-- 查询初始化菜单 -->
@@ -37,6 +39,7 @@
         <where>
             is_fun=0
         </where>
+        order by parent_id,order_num
     </select>
 
     <!-- 分页查询 -->
