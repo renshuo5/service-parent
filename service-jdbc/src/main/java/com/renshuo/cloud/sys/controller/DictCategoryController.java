@@ -3,8 +3,8 @@ package com.renshuo.cloud.sys.controller;
 import com.renshuo.cloud.common.model.ResultMsg;
 import com.renshuo.cloud.constant.Version;
 import com.renshuo.cloud.reqbean.PagerInfo;
-import com.renshuo.cloud.sys.model.MenuInfoModel;
-import com.renshuo.cloud.sys.service.MenuInfoService;
+import com.renshuo.cloud.sys.model.DictCategoryModel;
+import com.renshuo.cloud.sys.service.DictCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @description: 控制层
+ * @description: 字典类别|字典类别|dc控制层
  * @author: renshuo
- * @date: 2024-03-18
+ * @date: 2024-03-27
  */
 @RestController
 @RequestMapping(value = "/" + Version.VERSION_V1 + "/sys")
-@Api(value = "系统管理-菜单", description = "系统管理-菜单", tags = {"系统管理-菜单"})
+@Api(value = "字典类别|字典类别|dc", description = "字典类别|字典类别|dc", tags = {"字典类别|字典类别|dc"})
 @Slf4j
-public class MenuInfoController {
+public class DictCategoryController {
 
     @Autowired
-    private MenuInfoService menuInfoService;
+    private DictCategoryService dictCategoryService;
 
 
     /**
@@ -35,44 +35,10 @@ public class MenuInfoController {
      * @param pagerInfo
      * @return
      */
-    @PostMapping("/menuInfos")
+    @PostMapping("/dictCategorys")
     @ApiOperation(value = "多条件列表查询", notes = "多条件列表查询")
     public ResultMsg list(@RequestBody PagerInfo pagerInfo) {
-        return ResultMsg.success(menuInfoService.list(pagerInfo));
-    }
-
-    /**
-     * 查询列表前台转树形菜单
-     *
-     * @return
-     */
-    @GetMapping("/menuInfos")
-    @ApiOperation(value = "查询列表", notes = "查询列表")
-    public ResultMsg list() {
-        return ResultMsg.success(menuInfoService.listAll());
-    }
-
-
-    /**
-     * 查询列表前台转树形菜单
-     *
-     * @return
-     */
-    @PostMapping("/menuInfosTreeCheck")
-    @ApiOperation(value = "数据权限复选框选择树", notes = "数据权限复选框选择树")
-    public ResultMsg menuInfosTreeCheck() {
-        return ResultMsg.success(menuInfoService.menuInfosTreeCheck());
-    }
-
-    /**
-     * 查询列表前台转树形菜单
-     *
-     * @return
-     */
-    @PostMapping("/menuInfosNoBut")
-    @ApiOperation(value = "下拉框查询", notes = "下拉框查询")
-    public ResultMsg listMenu() {
-        return ResultMsg.success(menuInfoService.getMenuAll());
+        return ResultMsg.success(dictCategoryService.list(pagerInfo));
     }
 
     /**
@@ -83,10 +49,10 @@ public class MenuInfoController {
      */
     @ApiOperation(value = "详细信息", notes = "根据ID获取详细信息")
     @ApiImplicitParam(name = "id", value = "ID", required = true, dataType = "String", paramType = "path")
-    @GetMapping(value = "/menuInfo/{id}")
+    @GetMapping(value = "/dictCategory/{id}")
     public ResultMsg get(@PathVariable String id) {
-        MenuInfoModel menuInfo = menuInfoService.get(id);
-        return ResultMsg.success(menuInfo);
+        DictCategoryModel dictCategory = dictCategoryService.get(id);
+        return ResultMsg.success(dictCategory);
     }
 
     /**
@@ -95,10 +61,10 @@ public class MenuInfoController {
      * @param model
      * @return
      */
-    @PostMapping(value = "/menuInfo")
+    @PostMapping(value = "/dictCategory")
     @ApiOperation(value = "新增", notes = "新增信息")
-    public ResultMsg add(@RequestBody MenuInfoModel model) {
-        menuInfoService.insert(model);
+    public ResultMsg add(@RequestBody DictCategoryModel model) {
+        dictCategoryService.insert(model);
         return ResultMsg.success("保存成功");
     }
 
@@ -108,11 +74,10 @@ public class MenuInfoController {
      * @param model
      * @return
      */
-    @PutMapping(value = "/menuInfo/{id}")
+    @PutMapping(value = "/dictCategory/{id}")
     @ApiOperation(value = "更新", notes = "编辑更新信息")
-    public ResultMsg update(@PathVariable String id, @RequestBody MenuInfoModel model) {
-        log.info("id:{}", id);
-        menuInfoService.update(model);
+    public ResultMsg update(@RequestBody DictCategoryModel model) {
+        dictCategoryService.update(model);
         return ResultMsg.success("修改成功");
     }
 
@@ -122,10 +87,10 @@ public class MenuInfoController {
      * @param ids
      * @return
      */
-    @DeleteMapping(value = "/menuInfo/{ids}")
+    @DeleteMapping(value = "/dictCategory/{ids}")
     @ApiOperation(value = "删除", notes = "根据ids批量删除数据信息")
     public ResultMsg update(@PathVariable String ids) {
-        int count = menuInfoService.delete(ids);
+        int count = dictCategoryService.delete(ids);
         return ResultMsg.success("删除成功");
     }
 
@@ -136,10 +101,10 @@ public class MenuInfoController {
      * @param pagerInfo
      * @return
      */
-    @PostMapping("/menuInfo/exportPage")
+    @PostMapping("/dictCategory/exportPage")
     @ApiOperation(value = "多条件批次导出", notes = "多条件批次导出")
     public void exportPage(HttpServletResponse response, @RequestBody PagerInfo pagerInfo) {
-        menuInfoService.exportPage(response, pagerInfo);
+        dictCategoryService.exportPage(response, pagerInfo);
     }
 
     /**
@@ -149,13 +114,10 @@ public class MenuInfoController {
      * @param pagerInfo
      * @return
      */
-    @PostMapping("/menuInfo/exportAll")
+    @PostMapping("/dictCategory/exportAll")
     @ApiOperation(value = "多条件一次性全部导出", notes = "多条件一次性全部导出")
     public void exportAll(HttpServletResponse response, @RequestBody PagerInfo pagerInfo) {
-        menuInfoService.exportAll(response, pagerInfo);
+        dictCategoryService.exportAll(response, pagerInfo);
     }
-
-
-
 
 }

@@ -1,58 +1,53 @@
-package com.renshuo.cloud.${domain.module}.service;
+package com.renshuo.cloud.sys.service;
 
-import com.renshuo.cloud.annation.Mybatis;
-import com.renshuo.cloud.service.impl.BaseService;
-import com.github.pagehelper.PageInfo;
-import com.renshuo.cloud.util.DateUtil;
-import com.renshuo.cloud.reqbean.PagerInfo;
-import com.renshuo.cloud.util.PagerInfoUtil;
-import com.renshuo.cloud.util.UtilHelper;
-import com.renshuo.cloud.util.MapperUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.github.pagehelper.PageInfo;
+import com.renshuo.cloud.annation.Mybatis;
+import com.renshuo.cloud.reqbean.PagerInfo;
+import com.renshuo.cloud.service.impl.BaseService;
+import com.renshuo.cloud.sys.domain.Dict;
+import com.renshuo.cloud.sys.excelModel.DictExcelModel;
+import com.renshuo.cloud.sys.model.DictModel;
+import com.renshuo.cloud.util.DateUtil;
+import com.renshuo.cloud.util.MapperUtil;
+import com.renshuo.cloud.util.PagerInfoUtil;
+import com.renshuo.cloud.util.UtilHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.renshuo.cloud.${domain.module}.domain.${domain.name};
-import com.renshuo.cloud.${domain.module}.model.${domain.name}Model;
-import com.renshuo.cloud.${domain.module}.excelModel.${domain.name}ExcelModel;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-* @description: ${domain.comments}业务层
+* @description: 字典管理|字典管理|d业务层
 * @author: renshuo
-* @date: ${date}
+* @date: 2024-03-27
 */
 @Slf4j
 @Service
-@Mybatis(namespace="com.renshuo.cloud.${domain.module}.dao.${domain.name}Mapper")
-public class ${domain.name}Service extends BaseService {
+@Mybatis(namespace="com.renshuo.cloud.sys.dao.DictMapper")
+public class DictService extends BaseService {
 
     public PageInfo list(PagerInfo pagerInfo){
         Map<String, Object> param = PagerInfoUtil.pageInfoToMap(pagerInfo);
         PageInfo pr = new PageInfo();
         // 非分页查询
         if (pagerInfo.getLimit() == null || pagerInfo.getLimit() <= 0) {
-            List<${domain.name}> list = findBySqlId("pagerModel", param);
+            List<Dict> list = findBySqlId("pagerModel", param);
             pr.setList(models(list));
         } else {
             pr = this.findPagerModel("pagerModel", param, pagerInfo.getStart(), pagerInfo.getLimit());
-            List<${domain.name}Model> collect = (List<${domain.name}Model>) pr.getList().stream().map(obj -> {
-                ${domain.name} ${domain.instName} = (${domain.name}) obj;
-                ${domain.name}Model model = ${domain.name}Model.fromEntry(${domain.instName});
+            List<DictModel> collect = (List<DictModel>) pr.getList().stream().map(obj -> {
+                Dict dict = (Dict) obj;
+                DictModel model = DictModel.fromEntry(dict);
                 return model;
             }).collect(Collectors.toList());
             pr.setList(Collections.singletonList(collect));
@@ -61,33 +56,33 @@ public class ${domain.name}Service extends BaseService {
         return pr;
     }
 
-    private List<${domain.name}Model> models(List<${domain.name}> entries) {
-        List<${domain.name}Model> collect = entries.stream().map(${domain.instName} -> {
-            ${domain.name}Model model = ${domain.name}Model.fromEntry(${domain.instName});
+    private List<DictModel> models(List<Dict> entries) {
+        List<DictModel> collect = entries.stream().map(dict -> {
+            DictModel model = DictModel.fromEntry(dict);
             return model;
         }).collect(Collectors.toList());
         return collect;
     }
 
-    public ${domain.name}Model get(String id){
+    public DictModel get(String id){
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
-        ${domain.name} entry = unique("findById", params);
+        Dict entry = unique("findById", params);
         if (entry == null) {
             throw new RuntimeException("对象已不存在");
         }
-        ${domain.name}Model model = ${domain.name}Model.fromEntry(entry);
+        DictModel model = DictModel.fromEntry(entry);
         return model;
 
     }
 
-    public void insert(${domain.name}Model model){
+    public void insert(DictModel model){
         String errorInfo = validaModel(model);
         if(StringUtils.isNotBlank(errorInfo)){
             throw new RuntimeException(errorInfo);
         }
 
-        ${domain.name} obj = new ${domain.name}();
+        Dict obj = new Dict();
         BeanUtils.copyProperties(model, obj);
         String id = UtilHelper.getUUID();
         String createTime = DateUtil.getNow();
@@ -96,18 +91,18 @@ public class ${domain.name}Service extends BaseService {
         insert(obj);
     }
 
-    public void update(${domain.name}Model model){
+    public void update(DictModel model){
         String errorInfo = validaModel(model);
         if(StringUtils.isNotBlank(errorInfo)){
             throw new RuntimeException(errorInfo);
         }
         Map<String, Object> params = new HashMap<>();
         params.put("id", model.getId());
-        ${domain.name} entry = unique("findById", params);
+        Dict entry = unique("findById", params);
         if (entry == null) {
             throw new RuntimeException("车辆记录不存在");
         }
-        ${domain.name} obj = new ${domain.name}();
+        Dict obj = new Dict();
         BeanUtils.copyProperties(model, obj);
         String updateTime = DateUtil.getNow();
         obj.setUpdateTime(updateTime);
@@ -119,14 +114,14 @@ public class ${domain.name}Service extends BaseService {
 
     }
 
-    private String validaModel(${domain.name}Model model) {
+    private String validaModel(DictModel model) {
         //返回null说明校验通过，返回校验字符串说明校验不通过
         return null;
     }
 
     private void setResponseInfo(HttpServletResponse response) throws UnsupportedEncodingException {
         String date = DateUtil.getNowNotBar();
-        String moduleName = "${domain.comments}";
+        String moduleName = "字典管理|字典管理|d";
         String suffix = "xlsx";
         String fileName = String.format("%s-%s.%s", new Object[]{moduleName, date, suffix});
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
@@ -137,12 +132,12 @@ public class ${domain.name}Service extends BaseService {
         Map<String, Object> param = PagerInfoUtil.pageInfoToMap(pagerInfo);
 
         try {
-            String sheetName = "${domain.comments}";
+            String sheetName = "字典管理|字典管理|d";
             setResponseInfo(response);
 
-            List<${domain.name}> list = this.findBySqlId("pagerModel", param);
-            List<${domain.name}ExcelModel> collect = list.stream().map(${domain.name}ExcelModel::fromEntry).collect(Collectors.toList());
-            EasyExcel.write(response.getOutputStream(), ${domain.name}ExcelModel.class).sheet(sheetName).doWrite(collect);
+            List<Dict> list = this.findBySqlId("pagerModel", param);
+            List<DictExcelModel> collect = list.stream().map(DictExcelModel::fromEntry).collect(Collectors.toList());
+            EasyExcel.write(response.getOutputStream(), DictExcelModel.class).sheet(sheetName).doWrite(collect);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,15 +156,15 @@ public class ${domain.name}Service extends BaseService {
         }
 
         try {
-            String sheetName = "${domain.comments}";
+            String sheetName = "字典管理|字典管理|d";
             setResponseInfo(response);
-            try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), ${domain.name}ExcelModel.class).build()) {
+            try (ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream(), DictExcelModel.class).build()) {
                 for (int i = 0; i < pageTotal; i++) {
                     // 每次都要创建writeSheet 这里注意必须指定sheetNo 而且sheetName必须不一样
                     WriteSheet writeSheet = EasyExcel.writerSheet(i, sheetName + (i + 1)).build();
                     //在数据库分页查询
                     PageInfo pagerModel = this.findPagerModel("pagerModel", param, i, size);
-                    List<${domain.name}ExcelModel> collect = ((List<${domain.name}>)pagerModel.getList()).stream().map(${domain.name}ExcelModel::fromEntry).collect(Collectors.toList());
+                    List<DictExcelModel> collect = ((List<Dict>)pagerModel.getList()).stream().map(DictExcelModel::fromEntry).collect(Collectors.toList());
                     excelWriter.write(collect, writeSheet);
                 }
             }
@@ -177,6 +172,33 @@ public class ${domain.name}Service extends BaseService {
             e.printStackTrace();
         }
 
+    }
+
+
+    public Map<String,List<Map<String,Object>>> findAllDicts() {
+        Map<String,List<Map<String,Object>>> res = new HashMap<>();
+
+        List<Dict> entries = findBySqlId("all", null);
+
+        entries.forEach(entry->{
+            if(!res.containsKey(entry.getType())){
+                List<Map<String,Object>> fieldList = new ArrayList<>();
+                Map<String,Object> fieldMap = new HashMap<>();
+                fieldMap.put("name",entry.getName());
+                fieldMap.put("value",entry.getVal());
+                fieldList.add(fieldMap);
+                res.put(entry.getType(),fieldList);
+            }else{
+                Map<String,Object> fieldMap = new HashMap<>();
+                fieldMap.put("name",entry.getName());
+                fieldMap.put("value",entry.getVal());
+                res.get(entry.getType()).add(fieldMap);
+            }
+
+        });
+
+
+        return res;
     }
 
 }

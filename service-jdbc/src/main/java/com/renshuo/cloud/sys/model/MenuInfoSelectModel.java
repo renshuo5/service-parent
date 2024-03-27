@@ -36,11 +36,18 @@ public class MenuInfoSelectModel {
     private Integer isRoot;
     @ApiModelProperty(value = "是否打开")
     private Boolean open = true;
+
+    @ApiModelProperty(value = "节点是否初始展开")
+    private Boolean spread =true;
+
     @ApiModelProperty(value = "是否选中")
-    private Boolean checked = true;
+    private Boolean checked = false;
 
     @ApiModelProperty(value = "菜单名称")
     private String name;
+
+    @ApiModelProperty(value = "节点标题")
+    private String title;
 
 
     private List<MenuInfoSelectModel> children;

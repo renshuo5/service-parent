@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//org//DTD Mapper 3.0//EN" "http://org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.renshuo.cloud.sys.dao.DictMapper">
+    <resultMap id="dictResults" type="com.renshuo.cloud.sys.domain.Dict"
+               autoMapping="true">
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="baseColumns">
+        id,name,val,type,note,group_name,order_num,create_time,create_by,update_time,update_by,del_flag,description,dict_code,dict_name
+    </sql>
+    <sql id="moreColumns">
+        id,name,val,type,note,group_name,order_num,create_time,create_by,update_time,update_by,del_flag,description,dict_code,dict_name
+    </sql>
+
+    <sql id="pagerModelWhereSqlId">
+        <where>
+
+        </where>
+    </sql>
+
+
+    <!-- 分页查询 -->
+    <select id="pagerModel" resultMap="dictResults" parameterType="java.util.HashMap" resultOrdered="true">
+        select
+            <include refid="moreColumns"/>
+        from
+        sys_dict
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="pagerModel_COUNT" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select
+            count(1)
+        from
+        sys_dict
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- excel分页查询 -->
+    <select id="pagerExcelModelCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select
+            count(1)
+        from
+        sys_dict
+        <include refid="pagerModelWhereSqlId" />
+    </select>
+
+    <!-- 根据id查询 -->
+    <select id="findById" resultType="com.renshuo.cloud.sys.domain.Dict"
+            parameterType="java.util.HashMap">
+        select
+        <include refid="moreColumns"/>
+        from
+        sys_dict
+        <where>
+            id=#{id}
+        </where>
+    </select>
+
+    <!-- 增加 -->
+    <insert id="insert" parameterType="java.util.HashMap">
+        insert into
+        sys_dict
+        (id
+        ,name
+        ,val
+        ,type
+        ,note
+        ,group_name
+        ,order_num
+        ,create_time
+        ,create_by
+        ,del_flag
+        ,description
+        ,dict_code
+        ,dict_name)
+        values
+        (#{id}
+        ,#{name}
+        ,#{val}
+        ,#{type}
+        ,#{note}
+        ,#{groupName}
+        ,#{orderNum}
+        ,#{createTime}
+        ,#{createBy}
+        ,#{delFlag}
+        ,#{description}
+        ,#{dictCode}
+        ,#{dictName})
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="java.util.HashMap">
+        update sys_dict set
+        id=id
+        ,name=#{name}
+        ,val=#{val}
+        ,type=#{type}
+        ,note=#{note}
+        ,group_name=#{groupName}
+        ,order_num=#{orderNum}
+        ,update_time=#{updateTime}
+        ,update_by=#{updateBy}
+        ,del_flag=#{delFlag}
+        ,description=#{description}
+        ,dict_code=#{dictCode}
+        ,dict_name=#{dictName}
+        <where>
+            id = #{id}
+        </where>
+
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="java.util.HashMap">
+        delete from
+        sys_dict
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <!-- 查询所有的结果 -->
+    <select id="all" resultType="com.renshuo.cloud.sys.domain.Dict" parameterType="java.util.HashMap">
+        select
+        <include refid="baseColumns"/>
+        from
+        sys_dict d
+        <include refid="pagerModelWhereSqlId" />
+        order by d.type, d.order_num
+    </select>
+
+</mapper>

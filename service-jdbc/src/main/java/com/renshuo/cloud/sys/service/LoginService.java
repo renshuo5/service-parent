@@ -9,6 +9,7 @@ import com.renshuo.cloud.user.model.LoginModel;
 import com.renshuo.cloud.util.CommonUtil;
 import com.renshuo.cloud.util.CookieUtils;
 import com.renshuo.cloud.util.JwtUtil;
+import jodd.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class LoginService {
 
     @Autowired
     private MenuInfoService menuInfoService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Value("${jwtSecret:salt}")
     private String secret;
@@ -142,7 +146,17 @@ public class LoginService {
      * @return
      */
     public Map<String, Object> me() {
-
-        return null;
+        Map<String, Object> result = new HashMap<>();
+        String curRoleId ="";
+        result.put("curRoleIsValid", 1);
+        result.put("curRoleIsValidName", "是");
+        result.put("curRoleId", curRoleId);
+        String indexUrl = roleService.findIndexUrl(curRoleId);
+        if (StringUtil.isEmpty(indexUrl)) {
+            result.put("indexUrl", "");
+        } else {
+            result.put("indexUrl", indexUrl);
+        }
+        return result;
     }
 }

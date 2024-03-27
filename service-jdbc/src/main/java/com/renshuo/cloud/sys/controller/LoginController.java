@@ -117,4 +117,13 @@ public class LoginController {
     }
 
 
+    /**
+     * 访问监控，获取设备的uuid，前端生成在cookie中、uv，每次访问页面的pv
+     */
+    @GetMapping("/am")
+    public void accessMonitoring(){
+
+    }
+
+
 }
