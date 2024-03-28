@@ -1,9 +1,12 @@
 package com.renshuo.cloud.sys.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.renshuo.cloud.common.model.ResultMsg;
+import com.renshuo.cloud.common.model.ResultPageMsg;
 import com.renshuo.cloud.constant.Version;
 import com.renshuo.cloud.reqbean.PagerInfo;
 import com.renshuo.cloud.sys.model.RoleModel;
+import com.renshuo.cloud.sys.service.RoleMenuLkService;
 import com.renshuo.cloud.sys.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
 * @description: 角色管理|角色管理|role控制层
@@ -28,6 +32,8 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private RoleMenuLkService roleMenuLkService;
 
     /**
     * 查询列表信息
@@ -36,8 +42,9 @@ public class RoleController {
     */
     @PostMapping("/roles")
     @ApiOperation(value = "多条件列表查询", notes = "多条件列表查询")
-    public ResultMsg list(@RequestBody PagerInfo pagerInfo) {
-        return ResultMsg.success(roleService.list(pagerInfo));
+    public ResultPageMsg list(@RequestBody PagerInfo pagerInfo) {
+        PageInfo page = roleService.list(pagerInfo);
+        return ResultPageMsg.success(page.getTotal(),page.getList());
     }
 
     /**
@@ -112,5 +119,29 @@ public class RoleController {
     public void exportAll(HttpServletResponse response, @RequestBody PagerInfo pagerInfo) {
         roleService.exportAll(response, pagerInfo);
     }
+
+    /**
+     * 新增角色和菜单的关联
+     * @param model
+     * @return
+     */
+    @PostMapping(value="/role/addRoleMenuLk")
+    @ApiOperation(value = "新增", notes = "新增信息")
+    public ResultMsg addRoleModuleLk(@RequestBody RoleModel model){
+        roleService.addRoleModuleLk(model);
+        return ResultMsg.success("保存成功");
+    }
+    /**
+     * 新增角色和菜单的关联
+     * @param roleId
+     * @return
+     */
+    @GetMapping(value="/role/{roleId}/getRoleMenuLk")
+    @ApiOperation(value = "查询", notes = "查询")
+    public ResultMsg getRoleModuleLk(@PathVariable String roleId){
+        List<String> menuIds = roleMenuLkService.queryMenuIdListByRoleId(roleId);
+        return ResultMsg.success(menuIds);
+    }
+
 
 }

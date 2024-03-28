@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+
 /**
 * @description: 角色管理|角色管理|role模型
 * @author: renshuo
@@ -62,6 +64,8 @@ public class RoleModel {
     @ApiModelProperty(value = "更新人")
     @ExcelIgnore
     private String updateBy;
+
+    private List<String> menuIds;
 
 
     /**

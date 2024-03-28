@@ -33,7 +33,7 @@ public class RoleMenuLkModel {
 
     @ApiModelProperty(value = "菜单id")
     @ExcelProperty("菜单id")
-    private String moduleId;
+    private String menuId;
 
     @ApiModelProperty(value = "创建时间")
     @ExcelIgnore

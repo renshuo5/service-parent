@@ -40,6 +40,9 @@ public class LoginService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private RoleMenuLkService roleMenuLkService;
+
     @Value("${jwtSecret:salt}")
     private String secret;
 
@@ -109,6 +112,8 @@ public class LoginService {
      */
     public ResultMsg init() {
 
+        //todo 获取用户的当前roleId来查询分配的菜单，和首页显示什么页面 homeInfoModel.setHref
+
         InitModel initModel = new InitModel();
         LogoInfoModel logoInfoModel = new LogoInfoModel();
         logoInfoModel.setTitle("renshuo后台");
@@ -147,7 +152,7 @@ public class LoginService {
      */
     public Map<String, Object> me() {
         Map<String, Object> result = new HashMap<>();
-        String curRoleId ="";
+        String curRoleId ="1556bc05499a45c493b69a150ed8fd41";
         result.put("curRoleIsValid", 1);
         result.put("curRoleIsValidName", "是");
         result.put("curRoleId", curRoleId);
@@ -157,6 +162,12 @@ public class LoginService {
         } else {
             result.put("indexUrl", indexUrl);
         }
+
+        //获取角色的按钮权限菜单code
+        List<String> btnCodes = roleMenuLkService.queryMenuCodeByRoleId(curRoleId);
+
+        result.put("btnPermission", btnCodes);
+
         return result;
     }
 }

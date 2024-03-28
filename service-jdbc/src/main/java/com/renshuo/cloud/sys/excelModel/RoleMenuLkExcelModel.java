@@ -28,7 +28,7 @@ public class RoleMenuLkExcelModel {
 
     @ApiModelProperty(value = "菜单id")
     @ExcelProperty("菜单id")
-    private String moduleId;
+    private String menuId;
 
 
     /**

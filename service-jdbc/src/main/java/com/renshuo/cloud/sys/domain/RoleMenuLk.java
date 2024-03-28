@@ -23,7 +23,7 @@ public class RoleMenuLk {
     private String roleId;
 
     /** 菜单id **/
-    private String moduleId;
+    private String menuId;
 
     /** 创建时间 **/
     private String createTime;

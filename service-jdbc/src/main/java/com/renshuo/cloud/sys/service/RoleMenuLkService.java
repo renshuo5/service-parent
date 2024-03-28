@@ -1,5 +1,6 @@
 package com.renshuo.cloud.sys.service;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
@@ -175,4 +176,42 @@ public class RoleMenuLkService extends BaseService {
 
     }
 
+    /**
+     * 查询用户角色分配的菜单code
+     * @param roleId
+     * @return
+     */
+    public List<String> queryMenuCodeByRoleId(String roleId){
+        //获取当权限的map
+        Map<String,Object> params = new HashMap<>();
+        //如果不是管理员，才用roleIc去查询
+        if (!"admin".equals("")){
+            params.put("roleId",roleId);
+        }
+        return findBySqlId("queryMenuCodeByRoleId", params);
+    }
+    /**
+     * 查询用户角色分配的菜单id,用于角色分配菜单权限，已经选中的菜单进行回显
+     * @param roleId
+     * @return
+     */
+    public List<String> queryMenuIdListByRoleId(String roleId){
+        //获取当权限的map
+        Map<String,Object> params = new HashMap<>();
+        //如果不是管理员，才用roleIc去查询
+        if (!"admin".equals("")){
+            params.put("roleId",roleId);
+        }
+        return findBySqlId("queryMenuIdListByRoleId", params);
+    }
+
+    /**
+     * 根据roleId删除数据
+     * @param roleId
+     * @return
+     */
+    public int deleteRoleModuleLk(String roleId) {
+        int res = delete("deleteByRoleId",roleId);
+        return res;
+    }
 }

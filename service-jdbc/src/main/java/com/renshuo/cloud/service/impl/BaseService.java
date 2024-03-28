@@ -77,7 +77,7 @@ public class BaseService implements IBaseService, InitializingBean {
 
     @Override
     public PageInfo findPagerModel(String selectId, Map<String, Object> params, int start, int limit) {
-        start = start *limit;
+        start = (start-1) *limit;
         PageRowBounds rowBounds = new PageRowBounds(start, limit);
         List list = sqlSessionTemplate.selectList(getSqlId(selectId), params, rowBounds);
         PageInfo pageInfo = new PageInfo(list);

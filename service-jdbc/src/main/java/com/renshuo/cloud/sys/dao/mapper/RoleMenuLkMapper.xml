@@ -7,10 +7,10 @@
 
     <!-- 通用查询结果列 -->
     <sql id="baseColumns">
-        id,role_id,module_id,create_time,create_by
+        id,role_id,menu_id,create_time,create_by
     </sql>
     <sql id="moreColumns">
-        id,role_id,module_id,create_time,create_by
+        id,role_id,menu_id,create_time,create_by
     </sql>
 
     <sql id="pagerModelWhereSqlId">
@@ -65,13 +65,13 @@
         sys_role_menu_lk
         (id
         ,role_id
-        ,module_id
+        ,menu_id
         ,create_time
         ,create_by)
         values
         (#{id}
         ,#{roleId}
-        ,#{moduleId}
+        ,#{menuId}
         ,#{createTime}
         ,#{createBy})
     </insert>
@@ -81,7 +81,7 @@
         update sys_role_menu_lk set
         id=id
         ,role_id=#{roleId}
-        ,module_id=#{moduleId}
+        ,menu_id=#{menuId}
         <where>
             id = #{id}
         </where>
@@ -96,5 +96,38 @@
             id = #{id}
         </where>
     </delete>
+
+    <!-- 根据roleId删除信息 -->
+    <delete id="deleteByRoleId" parameterType="java.util.HashMap">
+        delete from
+        sys_role_menu_lk
+        <where>
+            role_id = #{roleId}
+        </where>
+    </delete>
+
+
+    <!-- 查询角色按钮权限标识 -->
+    <select id="queryMenuCodeByRoleId" resultType="string" parameterType="java.util.HashMap">
+        select m.code from sys_menu_info m
+        where
+        1=1
+        <if test="roleId != null">
+            and m.id in(
+            select rmlk.menu_id from sys_role_menu_lk rmlk where rmlk.role_id = #{roleId}
+            )
+        </if>
+        ORDER BY m.parent_id, m.create_time ASC
+    </select>
+
+    <select id="queryMenuIdListByRoleId" resultType="string"  parameterType="java.util.HashMap">
+        select
+        menu_id
+        from
+        sys_role_menu_lk
+        <where>
+            role_id = #{roleId}
+        </where>
+    </select>
 
 </mapper>

@@ -1,9 +1,11 @@
 package com.renshuo.cloud.sys.service;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.renshuo.cloud.annation.Mybatis;
 import com.renshuo.cloud.reqbean.PagerInfo;
 import com.renshuo.cloud.service.impl.BaseService;
@@ -17,7 +19,9 @@ import com.renshuo.cloud.util.UtilHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -39,6 +43,20 @@ import java.util.stream.Collectors;
 @Mybatis(namespace="com.renshuo.cloud.sys.dao.RoleMapper")
 public class RoleService extends BaseService {
 
+    @Autowired
+    private RoleMenuLkService roleMenuLkService;
+
+    /**
+     *
+     * {
+     code: 0,
+     msg: "",
+     count: 1000,
+     data: []
+     }
+     * @param pagerInfo
+     * @return
+     */
     public PageInfo list(PagerInfo pagerInfo){
         Map<String, Object> param = PagerInfoUtil.pageInfoToMap(pagerInfo);
         PageInfo pr = new PageInfo();
@@ -46,6 +64,7 @@ public class RoleService extends BaseService {
         if (pagerInfo.getLimit() == null || pagerInfo.getLimit() <= 0) {
             List<Role> list = findBySqlId("pagerModel", param);
             pr.setList(models(list));
+            pr.setTotal(list.size());
         } else {
             pr = this.findPagerModel("pagerModel", param, pagerInfo.getStart(), pagerInfo.getLimit());
             List<RoleModel> collect = (List<RoleModel>) pr.getList().stream().map(obj -> {
@@ -53,7 +72,7 @@ public class RoleService extends BaseService {
                 RoleModel model = RoleModel.fromEntry(role);
                 return model;
             }).collect(Collectors.toList());
-            pr.setList(Collections.singletonList(collect));
+            pr.setList(collect);
         }
 
         return pr;
@@ -181,5 +200,29 @@ public class RoleService extends BaseService {
 
         return unique("findIndexUrl",curRoleId);
 
+    }
+
+
+    /**
+     * 查询角色模块表,
+     * @param model 角色
+     * @return id
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void addRoleModuleLk(RoleModel model){
+        String roleId = model.getId();
+        //保存前先删除现有设计
+        int res = roleMenuLkService.deleteRoleModuleLk(roleId);
+        Map<String,Object> params = Maps.newHashMap();
+        List<String> menuList = model.getMenuIds();
+        for (String menuId : menuList) {
+            String id = UtilHelper.getUUID();
+            params.put("id",id);
+            params.put("roleId",roleId);
+            params.put("menuId",menuId);
+            params.put("createTime",DateUtil.getNow());
+            params.put("createBy", "renshuo");
+            roleMenuLkService.insert(params);
+        }
     }
 }

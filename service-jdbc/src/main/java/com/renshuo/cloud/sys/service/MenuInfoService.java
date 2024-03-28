@@ -75,7 +75,7 @@ public class MenuInfoService extends BaseService {
 
 
     /**
-     * 全部的菜单内容不包括按钮
+     * select下拉框使用：全部的菜单内容不包括按钮
      * @return
      */
     public List<MenuInfoSelectModel> getMenuAll(){
@@ -94,7 +94,32 @@ public class MenuInfoService extends BaseService {
         for (MenuInfoSelectModel menu : collect) {
             if(menu.getIsRoot().intValue() == 1){
                 //说明是root节点 top菜单
+                menuTree.add(findSelectChildren(menu, collect));
+            }
 
+        }
+        return menuTree;
+    }
+    /**
+     * select下拉框使用：全部的菜单内容不包括按钮
+     * @return
+     */
+    public List<MenuInfoSelectModel> menuInfosTreeCheck(){
+        Map<String, Object> param = new HashMap<>();
+        PageInfo pr = new PageInfo();
+        // 非分页查询
+        List<MenuInfo> list = findBySqlId("pagerModel", param);
+
+        List<MenuInfoSelectModel> collect = list.stream().map(menuInfo -> {
+            MenuInfoSelectModel model = MenuInfoSelectModel.fromEntry(menuInfo);
+            return model;
+        }).collect(Collectors.toList());
+
+        List<MenuInfoSelectModel> menuTree  = new ArrayList<>();
+
+        for (MenuInfoSelectModel menu : collect) {
+            if(menu.getIsRoot().intValue() == 1){
+                //说明是root节点 top菜单
                 menuTree.add(findSelectChildren(menu, collect));
             }
 
@@ -102,6 +127,10 @@ public class MenuInfoService extends BaseService {
         return menuTree;
     }
 
+    /**
+     * 菜单使用
+     * @return
+     */
     public List<MenuInfoModel> getMenuTree(){
 
         Map<String, Object> param = new HashMap<>();

@@ -28,7 +28,7 @@ spring:
     logSlowSql: true
   redis:
     host: 120.53.104.206
-    port: 6379
+    port: 6381
     password: renshuo
 mybatis:
   mapper-locations: classpath*:com/renshuo/cloud/**/*Mapper.xml
@@ -40,4 +40,4 @@ mybatis:
     initialDelay: 30
 logging:
   level:
-    com.renshuo.cloud.user.dao: debug
+    com.renshuo.cloud.sys.dao: debug
