@@ -11,6 +11,7 @@ import com.renshuo.cloud.reqbean.PagerInfo;
 import com.renshuo.cloud.service.impl.BaseService;
 import com.renshuo.cloud.sys.domain.Role;
 import com.renshuo.cloud.sys.excelModel.RoleExcelModel;
+import com.renshuo.cloud.sys.model.RoleMenuLkModel;
 import com.renshuo.cloud.sys.model.RoleModel;
 import com.renshuo.cloud.util.DateUtil;
 import com.renshuo.cloud.util.MapperUtil;
@@ -209,8 +210,8 @@ public class RoleService extends BaseService {
      * @return id
      */
     @Transactional(rollbackFor = Exception.class)
-    public void addRoleModuleLk(RoleModel model){
-        String roleId = model.getId();
+    public void addRoleModuleLk(RoleMenuLkModel model){
+        String roleId = model.getRoleId();
         //保存前先删除现有设计
         int res = roleMenuLkService.deleteRoleModuleLk(roleId);
         Map<String,Object> params = Maps.newHashMap();

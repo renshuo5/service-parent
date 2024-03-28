@@ -101,7 +101,7 @@ public class MenuInfoService extends BaseService {
         return menuTree;
     }
     /**
-     * select下拉框使用：全部的菜单内容不包括按钮
+     * 数据权限复选框选择树：全部的菜单内容包括按钮
      * @return
      */
     public List<MenuInfoSelectModel> menuInfosTreeCheck(){

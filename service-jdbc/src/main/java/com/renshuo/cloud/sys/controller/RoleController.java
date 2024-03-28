@@ -5,6 +5,7 @@ import com.renshuo.cloud.common.model.ResultMsg;
 import com.renshuo.cloud.common.model.ResultPageMsg;
 import com.renshuo.cloud.constant.Version;
 import com.renshuo.cloud.reqbean.PagerInfo;
+import com.renshuo.cloud.sys.model.RoleMenuLkModel;
 import com.renshuo.cloud.sys.model.RoleModel;
 import com.renshuo.cloud.sys.service.RoleMenuLkService;
 import com.renshuo.cloud.sys.service.RoleService;
@@ -127,7 +128,7 @@ public class RoleController {
      */
     @PostMapping(value="/role/addRoleMenuLk")
     @ApiOperation(value = "新增", notes = "新增信息")
-    public ResultMsg addRoleModuleLk(@RequestBody RoleModel model){
+    public ResultMsg addRoleModuleLk(@RequestBody RoleMenuLkModel model){
         roleService.addRoleModuleLk(model);
         return ResultMsg.success("保存成功");
     }

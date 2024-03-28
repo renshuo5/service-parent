@@ -130,4 +130,21 @@
         </where>
     </select>
 
+
+    <select id="queryMenuIdListByRoleId" resultType="com.renshuo.cloud.sys.domain.MenuInfo"  parameterType="java.util.HashMap">
+
+        select
+        smi.id,
+        smi.parent_id,
+        smi.is_root
+        from
+        sys_menu_info smi
+        left join sys_role_menu_lk lk on smi.id=lk.menu_id
+        where
+        <where>
+            lk.role_id = #{roleId}
+        </where>
+        order by parent_id,order_num
+    </select>
+
 </mapper>

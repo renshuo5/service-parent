@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+
 /**
 * @description: 角色菜单中间|角色菜单中间表|rmlk模型
 * @author: renshuo
@@ -43,6 +45,7 @@ public class RoleMenuLkModel {
     @ExcelIgnore
     private String createBy;
 
+    private List<String> menuIds;
 
     /**
     * 将实体转为前台model
